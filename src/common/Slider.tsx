@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import React from "react";
-import Icon from "@/common/FontAwesomeIcon";
-import { faArrowAltCircleLeft, faArrowAltCircleRight } from "@fortawesome/free-solid-svg-icons";
+// import Icon from "@/common/FontAwesomeIcon";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 const SliderContainer = styled.div`
   position: relative;
   width: 100%;
@@ -89,8 +90,8 @@ const Slider = () => {
                 <Image key={images[currentImage].id} src={images[currentImage].image} alt={`Image ${images[currentImage].id}`} />
             </div>
         </div>
-      <PrevButton onClick={prevImage}><Icon icon={faArrowAltCircleLeft} className="icon fa-2xl"></Icon></PrevButton>
-      <NextButton onClick={nextImage}><Icon icon={faArrowAltCircleRight} className="icon fa-2xl"></Icon></NextButton>
+      <PrevButton onClick={prevImage}><ArrowBackIcon/></PrevButton>
+      <NextButton onClick={nextImage}><ArrowForwardIcon/></NextButton>
     </SliderContainer>
   );
 };

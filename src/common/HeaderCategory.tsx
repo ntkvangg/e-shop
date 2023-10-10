@@ -1,6 +1,4 @@
 import styled from "styled-components";
-import { faCircleArrowRight, faCircleArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import Icon from "./FontAwesomeIcon";
 
 const Wrapper = styled.div`
     display: flex;
@@ -49,10 +47,7 @@ const CategoryName = styled.span`
 `
 
 
-
-
-
-const HeaderCategory = ({label, title}) => {
+const HeaderCategory = ({label, title}: {label: string, title: string}) => {
 
     return <Wrapper className="wrapper-category">
         <TitleWrapper>

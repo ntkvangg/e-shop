@@ -77,9 +77,6 @@ export default function Footer() {
                         <EmailIcon fontSize='small'/> 
                         <Typography variant="subtitle1" component="div" sx={{fontSize: '.875rem', display: 'flex', alignItems: 'center'}}> eshop@gmail.com</Typography>
                     </Stack>
-                    
-                    
-                    
                 </Box>
             </ColumnStyled>
         </ContainerStyled>

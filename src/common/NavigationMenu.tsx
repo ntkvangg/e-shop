@@ -1,10 +1,10 @@
 import React from "react";
-// import styled from "styled-components";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SearchIcon from '@mui/icons-material/Search';
 import { NavLink } from "react-router-dom";
-import { Badge, Box, IconButton, InputAdornment, Stack, TextField } from "@mui/material";
-import { styled, useTheme } from '@mui/material/styles'
+import { Badge, Box, ClickAwayListener, Grow, IconButton, InputAdornment, MenuItem, MenuList, Paper, Popper, Stack, TextField } from "@mui/material";
+import { styled, useTheme } from '@mui/material/styles';
+import MenuIcon from '@mui/icons-material/Menu';
 
 const NavContainer = styled(Box)`
   background-color: #fff;
@@ -14,6 +14,12 @@ const NavContainer = styled(Box)`
   align-items: center;
   padding: 10px 20px;
   border-bottom: 2px solid #ddd;
+  .menu-mobile{
+    display: none;
+  }
+  .menu-mobile-popper{
+    width: 650px;
+  }
 
   @media (max-width: 786px) {
     padding: 5px 10px;
@@ -21,17 +27,23 @@ const NavContainer = styled(Box)`
     .list-menu{
       display: none;
     }
+    .menu-mobile{
+      display: block;
+    }
+    .menu-mobile-popper{
+      width: 300px;
+    }
   }
 `;
 
-const StyledInput = styled(TextField)(({ theme }: {theme: any}) => {
+const StyledInput = styled(TextField)(({ theme }: { theme: any }) => {
   return {
-  '& .MuiOutlinedInput-root': {
-    backgroundColor: theme?.palette?.grey[200],
-    borderRadius: '.2rem',
-    '& fieldset': { borderColor: 'transparent' },
-  },
-}
+    '& .MuiOutlinedInput-root': {
+      backgroundColor: theme?.palette?.grey[200],
+      borderRadius: '.2rem',
+      '& fieldset': { borderColor: 'transparent' },
+    },
+  }
 })
 
 const Logo = styled(NavLink)`
@@ -65,15 +77,81 @@ const NavLinkStyled = styled(NavLink)`
 
 
 const NavigationMenu = () => {
+  const [open, setOpen] = React.useState(false);
+  const anchroRef = React.useRef<HTMLButtonElement>(null);
+
+  const handleClose = () => {
+    setOpen(false);
+  }
+
+  const handleListKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      setOpen(false);
+    } else if (event.key === 'Escape') {
+      setOpen(false);
+    }
+  }
   return (
     <NavContainer component={'nav'}>
-      <Logo to="/">Your Logo</Logo>
+      <Stack direction={'row'} spacing={1} justifyItems={'center'}>
+        <>
+          <IconButton
+            className="menu-mobile"
+            ref={anchroRef}
+            size="large"
+            onClick={() => setOpen(!open)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Popper
+            open={open}
+            anchorEl={anchroRef.current}
+            role={undefined}
+            placement="bottom-start"
+            transition
+            disablePortal
+            className="menu-mobile-popper"
+            sx={{ zIndex: 1000}}
+          >
+            {({ TransitionProps, placement }) => (
+              <Grow
+                {...TransitionProps}
+                style={{
+                  transformOrigin:
+                    placement === 'bottom-start' ? 'left top' : 'left bottom',
+                }}
+              >
+                <Paper>
+                  <ClickAwayListener onClickAway={handleClose}>
+                    <MenuList
+                      autoFocusItem={open}
+                      id="composition-menu"
+                      aria-labelledby="composition-button"
+                      onKeyDown={handleListKeyDown}
+                    >
+                      <MenuItem onClick={handleClose}>About</MenuItem>
+                      <MenuItem onClick={handleClose}>Contact</MenuItem>
+                      <MenuItem onClick={handleClose}>Services</MenuItem>
+                    </MenuList>
+                  </ClickAwayListener>
+                </Paper>
+              </Grow>
+            )}
+          </Popper>
+        </>
+        <MenuItem sx={{paddingTop: 0}}>
+          <Logo to="/">Your Logo</Logo>
+        </MenuItem>
+      </Stack>
+
+
       <NavList className="list-menu" component={'ul'}>
         <NavItem component={'li'}>
           <NavLinkStyled to="/">Home</NavLinkStyled>
         </NavItem>
         <NavItem component={'li'}>
-          <NavLinkStyled to="/about">contact</NavLinkStyled>
+          <NavLinkStyled to="/about">Contact</NavLinkStyled>
         </NavItem>
         <NavItem component={'li'}>
           <NavLinkStyled to="/services">About</NavLinkStyled>
@@ -84,24 +162,24 @@ const NavigationMenu = () => {
       </NavList>
       <Stack className="menu-toolbar" component={"div"} direction={"row"} spacing={1} alignItems={'center'}>
         <Box component={'form'}>
-          <StyledInput 
-            fullWidth 
-            type="text" 
-            placeholder="What are you looking for?" 
+          <StyledInput
+            fullWidth
+            type="text"
+            placeholder="What are you looking for?"
             variant="outlined"
-            size="small" 
+            size="small"
             label={null}
             InputProps={{
-            endAdornment:(
+              endAdornment: (
                 <InputAdornment position="end">
                   <SearchIcon />
-              </InputAdornment>
-            )
-          }}/>
+                </InputAdornment>
+              )
+            }} />
         </Box>
         <IconButton>
           <Badge badgeContent={2} color="error">
-            <ShoppingCartIcon color="action"/>
+            <ShoppingCartIcon color="action" />
           </Badge>
         </IconButton>
       </Stack>

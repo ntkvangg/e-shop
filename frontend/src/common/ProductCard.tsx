@@ -4,6 +4,7 @@ import { Image } from './Slider';
 import RateStar from './RateStar';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { Card, CardMedia, CardContent, Typography, Stack, Badge, Button, Box } from '@mui/material';
+import Helper from '@utils/index';
 
 
 const ContainerImage = styled(Box)`
@@ -46,21 +47,36 @@ const AddToCartContainer = styled.div`
         }
     }
 `
+interface ProductItem {
+    id: number,
+    title: string,
+    description: string,
+    price: number,
+    discountPercentage: number,
+    rating: number,
+    stock: number,
+    brand: string,
+    category: string,
+    thumbnail: string,
+    images: any
+
+}
 interface Props {
-    data?: any;
+    productItem?: ProductItem;
 }
 
 const CardProduct = forwardRef<HTMLDivElement, Props>(function CardProduct(props, ref){
+    const {productItem} = props;
     return (
     <Card sx={{ maxWidth: 345, minWidth: 300, boxShadow: 'none', borderRadius: 0 }} ref={ref}>
         <ContainerImage sx={{position: 'relative', cursor: 'pointer'}}>
             <CardMedia
             component="img"
             height="250"
-            image="https://images.pexels.com/photos/9842750/pexels-photo-9842750.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-            alt="green iguana"
+            image={productItem?.thumbnail}
+            alt={productItem?.title}
             />
-            <Badge color="error" badgeContent={'40%'} sx={{color: "#DB4444", position: 'absolute', top: '1.2rem', left: '2.2rem', '.MuiBadge-badge': {borderRadius: '3px', padding: '0.75rem'}}}/>
+            <Badge color="error" badgeContent={`${productItem?.discountPercentage}%`} sx={{color: "#DB4444", position: 'absolute', top: '1.2rem', left: '2.5rem', '.MuiBadge-badge': {borderRadius: '3px', padding: '0.75rem'}}}/>
             <AddToCartContainer>
                 <Button variant="outlined" startIcon={<AddShoppingCartIcon className='icon'/>} className='add-to-cart'>
                      Add to cart
@@ -69,17 +85,17 @@ const CardProduct = forwardRef<HTMLDivElement, Props>(function CardProduct(props
         </ContainerImage>
         <CardContent sx={{padding: '16px 5px'}}>
           <Typography gutterBottom variant="subtitle1" sx={{lineHeight: 1.5, fontFamily: "Poppins"}}>
-            HAVIT HV-G92 Gamepad
+            {productItem?.title}
           </Typography>
           <Stack direction="row" spacing={1} alignItems="center">
             <Typography variant="body1" color="error" sx={{lineHeight: 1.5, fontFamily: "Poppins"}}>
-                $120
+                ${productItem?.price}
             </Typography>
             <Typography variant="body1" color="text.secondary" sx={{lineHeight: 1.5, fontFamily: "Poppins"}}>
-                $160
+                ${Helper.caclulatePrice(productItem?.price, productItem?.discountPercentage || 0)}
             </Typography>
           </Stack>
-          <RateStar value={5} />
+          <RateStar value={productItem?.rating || 5} />
         </CardContent>
     </Card>
     )

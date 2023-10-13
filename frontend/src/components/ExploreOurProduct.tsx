@@ -96,9 +96,10 @@ const products = [
 
 
 interface Props {
+    data: any;
 }
 
-function ExploreOurProduct() {
+function ExploreOurProduct({data}: Props) {
     const loading = false;
 
     return (
@@ -110,9 +111,9 @@ function ExploreOurProduct() {
                         <HeaderCategory label="Our Products" title="Explore Our Products" />
                     </HeaderSectionStyle>
                     <Grid container spacing={2}>
-                        {products.map((product: any, index) => (
+                        {data.map((product: any, index: number) => (
                             <Grid item xs={12} sm={6} md={4} lg={3} xl={3} key={index}>
-                                <CardProduct key={index} data={product} />
+                                <CardProduct key={index} productItem={product} />
                             </Grid>
                         ))}
                     </Grid>

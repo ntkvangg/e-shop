@@ -242,7 +242,7 @@ function FlashSales( ) {
           <WrapperProductStyle className='product-list'>
             <ProductsContainer ref={containerRef}>
               {products.map((product: any, index) => (
-                <CardProduct key={index} ref={productRef} data={product} />
+                <CardProduct key={index} ref={productRef} productItem={product} />
               ))}
             </ProductsContainer>
           </WrapperProductStyle>

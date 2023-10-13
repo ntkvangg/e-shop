@@ -7,6 +7,7 @@ import ExploreOurProduct from "@components/ExploreOurProduct";
 import CustomerService from '@common/CustomerService';
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import IconButton from '@mui/material/IconButton';
+import ProductService from '@services/Product';
 
 const WrapperHomeStyle = styled.div`
     display: flex;
@@ -30,6 +31,7 @@ const ButtonUp = styled(IconButton)`
 
 function Home() {
     const [showTop, setShowTop] = useState(false);
+    const [ourProducts, setOurProducts] = useState([]);
 
     const handleScroll = () => {
         setShowTop(window.scrollY > 200) ;
@@ -42,11 +44,23 @@ function Home() {
         });
     }
 
+    const getOurProducts = async() => {
+        try{
+            const data = await ProductService.getProducts({skip: 0, limit: 8});
+            console.log(data);
+            setOurProducts(data.products);
+        }catch(error){
+            console.log("error", error);
+        }
+    }
+
     useEffect(() => {
+        getOurProducts();
         window.addEventListener("scroll", handleScroll);
         return ()=>{
             window.removeEventListener("scroll", handleScroll);
         }
+
     }, [])
 
     return (
@@ -61,7 +75,7 @@ function Home() {
                 <BestSellingProducts/>
             </section>
             <section>
-                <ExploreOurProduct/>
+                <ExploreOurProduct data = {ourProducts}/>
             </section>
             <section className='customer-service-section'>
                 <CustomerService/>

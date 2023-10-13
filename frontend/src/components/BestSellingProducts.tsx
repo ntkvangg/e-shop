@@ -109,7 +109,7 @@ function BestSellingProducts() {
                     <Grid container spacing={2}>
                         {products.map((product: any, index) => (
                             <Grid item xs={12} sm={6} md={4} lg={3} xl={3} key={index}>
-                                <CardProduct key={index} data={product} />
+                                <CardProduct key={index} productItem={product} />
                             </Grid>
                         ))}
                     </Grid>

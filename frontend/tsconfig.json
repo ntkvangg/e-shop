@@ -20,7 +20,9 @@
       "@pages/*": ["src/pages/*"],
       "@components/*": ["src/components/*"],
       "@common/*": ["src/common/*"],
-      "@root/*": ["src/*"]
+      "@root/*": ["src/*"],
+      "@services/*": ["src/api/services/*"],
+      "@utils/*": ["src/utils/*"]
     },
     "pretty": true
   },

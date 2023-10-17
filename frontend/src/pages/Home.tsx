@@ -31,7 +31,9 @@ const ButtonUp = styled(IconButton)`
 
 function Home() {
     const [showTop, setShowTop] = useState(false);
-    const [ourProducts, setOurProducts] = useState([]);
+    const [bestSellingProducts, setBestSellingProducts] = useState([]);
+    const [flashSaleProducts, setFlashSaleProducts] = useState([]);
+    const [exploreOurProducts, setExploreOurProducts] = useState([]);
 
     const handleScroll = () => {
         setShowTop(window.scrollY > 200) ;
@@ -44,18 +46,37 @@ function Home() {
         });
     }
 
-    const getOurProducts = async() => {
+    const getBestSellingProducts = async() => {
         try{
-            const data = await ProductService.getProducts({skip: 0, limit: 8});
-            console.log(data);
-            setOurProducts(data.products);
+            const data = await ProductService.getBestSellingProducts({skip: 10, limit: 4});
+            setBestSellingProducts(data.products);
         }catch(error){
             console.log("error", error);
         }
     }
 
+    const getFlashSaleProducts = async() => {
+        try{
+            const data = await ProductService.getFlashSaleProducts({skip: 80, limit: 20});
+            setFlashSaleProducts(data.products);
+        }catch(error){
+            console.log("error", error);
+        }
+    }
+
+    const getExploreOurProducts = async() => {
+        try{
+            const data = await ProductService.getExploreOurProducts({skip: 0, limit: 8});
+            setExploreOurProducts(data.products);
+        }catch(error){
+            console.log("error", error);
+        }   
+    }
+
     useEffect(() => {
-        getOurProducts();
+        getBestSellingProducts();
+        getFlashSaleProducts();
+        getExploreOurProducts();
         window.addEventListener("scroll", handleScroll);
         return ()=>{
             window.removeEventListener("scroll", handleScroll);
@@ -69,13 +90,13 @@ function Home() {
                 <Slider />
             </section>
             <section>
-                <FlashSales/>
+                <FlashSales data={flashSaleProducts}/>
             </section>
             <section>
-                <BestSellingProducts/>
+                <BestSellingProducts data={bestSellingProducts}/>
             </section>
             <section>
-                <ExploreOurProduct data = {ourProducts}/>
+                <ExploreOurProduct data = {exploreOurProducts}/>
             </section>
             <section className='customer-service-section'>
                 <CustomerService/>

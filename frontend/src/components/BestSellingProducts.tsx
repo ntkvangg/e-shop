@@ -93,10 +93,10 @@ const products = [
 
 
 interface Props {
-    
+    data: any;
 }
 
-function BestSellingProducts() {
+function BestSellingProducts({data}: any) {
    const loading = false;
     return (
         <>
@@ -104,10 +104,10 @@ function BestSellingProducts() {
                 <SkeletonView /> :
                 <WrapperHeader>
                     <HeaderSectionStyle className='header'>
-                        <HeaderCategory label="Our Products" title="Explore Our Products" />
+                        <HeaderCategory label="This Month" title="Best Selling" />
                     </HeaderSectionStyle>
                     <Grid container spacing={2}>
-                        {products.map((product: any, index) => (
+                        {data.map((product: any, index: number) => (
                             <Grid item xs={12} sm={6} md={4} lg={3} xl={3} key={index}>
                                 <CardProduct key={index} productItem={product} />
                             </Grid>

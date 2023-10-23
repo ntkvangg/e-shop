@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import Slider from '@common/Slider';
 import styled from 'styled-components';
 import FlashSales from '@components/FlashSales';
@@ -34,6 +35,7 @@ function Home() {
     const [bestSellingProducts, setBestSellingProducts] = useState([]);
     const [flashSaleProducts, setFlashSaleProducts] = useState([]);
     const [exploreOurProducts, setExploreOurProducts] = useState([]);
+    const navigate = useNavigate();
 
     const handleScroll = () => {
         setShowTop(window.scrollY > 200) ;
@@ -57,7 +59,7 @@ function Home() {
 
     const getFlashSaleProducts = async() => {
         try{
-            const data = await ProductService.getFlashSaleProducts({skip: 80, limit: 20});
+            const data = await ProductService.getFlashSaleProducts({skip: 80, limit: 4});
             setFlashSaleProducts(data.products);
         }catch(error){
             console.log("error", error);
@@ -84,13 +86,18 @@ function Home() {
 
     }, [])
 
+    
+    const handleViewAllFalshSaleProducts = useCallback(() => {
+        console.log("handleViewAllFalshSaleProducts");
+        navigate("/flash-sale");
+    }, [])
     return (
         <WrapperHomeStyle className='home-page'>
             <section className='section-header container-fuild'>
                 <Slider />
             </section>
             <section>
-                <FlashSales data={flashSaleProducts}/>
+                <FlashSales data={flashSaleProducts} onViewAll={handleViewAllFalshSaleProducts}/>
             </section>
             <section>
                 <BestSellingProducts data={bestSellingProducts}/>

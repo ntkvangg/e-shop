@@ -2,6 +2,7 @@ import React from "react";
 
 const Home = React.lazy(() => import("@pages/Home"));
 const Contact = React.lazy(() => import("@pages/Contact"));
+const FlashSales = React.lazy(() => import("@pages/FlashSales"));
 
 const publicRoutes = [
     {
@@ -12,6 +13,10 @@ const publicRoutes = [
         path: "/contact-us",
         component: Contact,
     },
+    {
+        path: "/flash-sale",
+        component: FlashSales
+    }
     // {
     //     path: "/profile",
     //     component: Profile

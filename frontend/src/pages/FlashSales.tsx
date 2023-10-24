@@ -4,14 +4,16 @@ import BoltIcon from '@mui/icons-material/Bolt';
 import CardProduct from "@common/ProductCard";
 import ProductService from "@root/api/services/Product";
 import SkeletonView from "@common/SkeletonView";
-import TimeCountDown from '@common/TimeCountDown';
+import {useSelector} from 'react-redux';
+import {isLoading} from '../stores/slices/loadingSlice';
 
 const FlashSales = () => {
     const [value, setValue] = useState('one');
     const [products, setProducts] = useState([]);
     const [skip, setSkip] = useState(0);
     const [limit, setLimit] = useState(8);
-    const [isLoading, setIsLoading] = useState(false);
+    // const [isLoading, setIsLoading] = useState(false);
+    const {loading} = useSelector(isLoading);
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
@@ -23,18 +25,14 @@ const FlashSales = () => {
             setLimit(8);
         }
 
-
     };
 
     const getProductsFashSales = async (skip: number, limit: number) => {
-        setIsLoading(true);
         try {
             const data = await ProductService.getFlashSaleProducts({ skip: skip, limit: limit });
             setProducts(data.products);
-            setIsLoading(false);
         } catch {
             console.log("error");
-            setIsLoading(false);
         }
 
     }
@@ -70,7 +68,7 @@ const FlashSales = () => {
             </Box>
             <Container maxWidth="xl">
                 {
-                    isLoading ? <SkeletonView /> : <Grid container spacing={2}>
+                    loading ? <SkeletonView /> : <Grid container spacing={2}>
                         {products.map((product: any, index: number) => (
                             <Grid item xs={12} sm={6} md={4} lg={3} xl={3} key={index}>
                                 <CardProduct key={index} productItem={product} />
@@ -80,7 +78,7 @@ const FlashSales = () => {
                 }
             </Container>
             {
-                isLoading ? null : <Box textAlign={'center'}>
+                loading ? null : <Box textAlign={'center'}>
                     <Button color="error" variant="contained" onClick={onViewMoreProducts}>View more 10 items</Button>
                 </Box>
             }

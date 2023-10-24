@@ -22,7 +22,8 @@
       "@common/*": ["src/common/*"],
       "@root/*": ["src/*"],
       "@services/*": ["src/api/services/*"],
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@stores/*": ["src/stores/*"]
     },
     "pretty": true
   },

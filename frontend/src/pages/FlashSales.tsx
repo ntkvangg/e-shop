@@ -12,7 +12,6 @@ const FlashSales = () => {
     const [products, setProducts] = useState([]);
     const [skip, setSkip] = useState(0);
     const [limit, setLimit] = useState(8);
-    // const [isLoading, setIsLoading] = useState(false);
     const {loading} = useSelector(isLoading);
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {

@@ -31,9 +31,9 @@ function DefaultLayput({ children }: {children: any}) {
                 <TopHeader/>
                 <Header />
             </div>
-            <Container className="content" maxWidth="xl" sx={{minHeight: 'calc(100vh - 65px)'}}>
+            <Box className="content" sx={{minHeight: 'calc(100vh - 65px)'}}>
                 {children}
-            </Container>
+            </Box>
             <Footer/>  
         </WrapperApp>
     );

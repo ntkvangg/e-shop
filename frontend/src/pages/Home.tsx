@@ -9,6 +9,7 @@ import CustomerService from '@common/CustomerService';
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import IconButton from '@mui/material/IconButton';
 import ProductService from '@services/Product';
+import { Container } from '@mui/material';
 
 const WrapperHomeStyle = styled.div`
     display: flex;
@@ -38,7 +39,7 @@ function Home() {
     const navigate = useNavigate();
 
     const handleScroll = () => {
-        setShowTop(window.scrollY > 200) ;
+        setShowTop(window.scrollY > 200);
     };
 
     const handleScrollToTop = () => {
@@ -48,31 +49,31 @@ function Home() {
         });
     }
 
-    const getBestSellingProducts = async() => {
-        try{
-            const data = await ProductService.getBestSellingProducts({skip: 10, limit: 4});
+    const getBestSellingProducts = async () => {
+        try {
+            const data = await ProductService.getBestSellingProducts({ skip: 10, limit: 4 });
             setBestSellingProducts(data.products);
-        }catch(error){
+        } catch (error) {
             console.log("error", error);
         }
     }
 
-    const getFlashSaleProducts = async() => {
-        try{
-            const data = await ProductService.getFlashSaleProducts({skip: 80, limit: 4});
+    const getFlashSaleProducts = async () => {
+        try {
+            const data = await ProductService.getFlashSaleProducts({ skip: 80, limit: 4 });
             setFlashSaleProducts(data.products);
-        }catch(error){
+        } catch (error) {
             console.log("error", error);
         }
     }
 
-    const getExploreOurProducts = async() => {
-        try{
-            const data = await ProductService.getExploreOurProducts({skip: 0, limit: 8});
+    const getExploreOurProducts = async () => {
+        try {
+            const data = await ProductService.getExploreOurProducts({ skip: 0, limit: 8 });
             setExploreOurProducts(data.products);
-        }catch(error){
+        } catch (error) {
             console.log("error", error);
-        }   
+        }
     }
 
     useEffect(() => {
@@ -80,13 +81,13 @@ function Home() {
         getFlashSaleProducts();
         getExploreOurProducts();
         window.addEventListener("scroll", handleScroll);
-        return ()=>{
+        return () => {
             window.removeEventListener("scroll", handleScroll);
         }
 
     }, [])
 
-    
+
     const handleViewAllFalshSaleProducts = useCallback(() => {
         console.log("handleViewAllFalshSaleProducts");
         navigate("/flash-sale");
@@ -96,21 +97,23 @@ function Home() {
             <section className='section-header container-fuild'>
                 <Slider />
             </section>
-            <section>
-                <FlashSales data={flashSaleProducts} onViewAll={handleViewAllFalshSaleProducts}/>
-            </section>
-            <section>
-                <BestSellingProducts data={bestSellingProducts}/>
-            </section>
-            <section>
-                <ExploreOurProduct data = {exploreOurProducts}/>
-            </section>
-            <section className='customer-service-section'>
-                <CustomerService/>
-            </section>
-            { showTop ? <ButtonUp size="large" onClick={handleScrollToTop} color='error'>
+            <Container maxWidth="xl">
+                <section>
+                    <FlashSales data={flashSaleProducts} onViewAll={handleViewAllFalshSaleProducts} />
+                </section>
+                <section>
+                    <BestSellingProducts data={bestSellingProducts} />
+                </section>
+                <section>
+                    <ExploreOurProduct data={exploreOurProducts} />
+                </section>
+                <section className='customer-service-section'>
+                    <CustomerService />
+                </section>
+                {showTop ? <ButtonUp size="large" onClick={handleScrollToTop} color='error'>
                     <ArrowCircleUpIcon fontSize="inherit" />
                 </ButtonUp> : null}
+            </Container>
         </WrapperHomeStyle>
     );
 }

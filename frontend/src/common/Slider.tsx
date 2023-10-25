@@ -1,78 +1,87 @@
-import styled from "styled-components";
-import React from "react";
-// import Icon from "@/common/FontAwesomeIcon";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-const SliderContainer = styled.div`
+import {styled} from '@mui/material/styles';
+import React, { useEffect } from "react";
+import { Box, CardMedia, IconButton, Stack } from "@mui/material";
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import FiberManualRecordOutlinedIcon from '@mui/icons-material/FiberManualRecordOutlined';
+const SliderContainer = styled(Box)`
   position: relative;
   width: 100%;
-  height: 300px; /* Set the height of the slider */
   overflow: hidden; /* Hide overflow for images that are larger than the container */
   .slider{
     display: flex;
-    transition: transform 300ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
     .slide{
-        flex: 0 0 100%;
+        width: 100%;
         height: 100%;
+        transition: all 400s ease-out;
         img{
             width: 100%;
-            height: 100%;
             object-fit: cover;
         }
+    }
+    .slide:hover{
+      cursor: pointer;
     }
   }
 `;
 
-export const Image = styled.img`
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: cover;
-`;
 
-const Button = styled.button`
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: transparent;
-  padding: 0;
-  outline: none;
-  border: none;
-  cursor: pointer;
-  color: #666666;
-
-  &:hover {
-    color: #000;
+const Button = styled(IconButton)(({ theme }: { theme: any })=>{
+  return {
+    position: 'absolute',
+    top: '50%',
+    color: theme.palette.grey[500],
+    '&:hover':{
+      transform: 'scale(1.1)',
+    }
   }
-  
-`;
+})
 
-const PrevButton = styled(Button)`
-  left: 0;
-`;
-
-const NextButton = styled(Button)`
-  right: 0;
-`;
+const StackStyled = styled(Stack)(({ theme }: { theme: any })=>{
+  console.log(theme)
+  return {
+    position: 'absolute',
+    bottom: '5px',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    left: 0,
+    right: 0,
+    textAlign: 'center',
+    zIndex: 1000,
+    justifyContent: 'center',
+    alignItems: 'center',
+    '& .MuiIconButton-root':{
+      color: theme.palette.grey[400]
+    },
+    '& .MuiIconButton-root:hover':{
+      transform: 'scale(1.1)',
+      color: theme.palette.primary.main
+    }
+  }
+})
 
 const images = [
   {
     id: 1,
     image:
-      "https://images.pexels.com/photos/6023354/pexels-photo-6023354.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100,s_1920x533/https://cdn.tgdd.vn/2023/10/banner/AWCS-2880-800-1920x548.png",
   },
   {
     id: 2,
     image:
-      "https://images.pexels.com/photos/1706694/pexels-photo-1706694.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100,s_1920x533/https://cdn.tgdd.vn/2023/10/banner/7E31D0EF-1D7C-41F0-BDB6-CA1EBFB5C5F3-1920x533.png",
   },
   {
     id: 3,
     image:
-      "https://images.pexels.com/photos/6023354/pexels-photo-6023354.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100,s_1920x533/https://cdn.tgdd.vn/2023/10/banner/IP15-2880-800-1920x533.png",
   },
 ];
-
-const Slider = () => {
+interface Props {
+  images?: any;
+  isPlaying?: boolean;
+}
+const Slider = ({isPlaying = true}: Props) => {
   const [currentImage, setCurrentImage] = React.useState(0);
 
   const nextImage = () => {
@@ -83,15 +92,41 @@ const Slider = () => {
     setCurrentImage((prevImage) => (prevImage - 1 + images.length) % images.length);
   };
 
+  const onSelectedImage = (index: number) => {
+    setCurrentImage(index);
+  }
+
+  useEffect(()=>{
+    if(isPlaying){
+      const intervalId = setInterval(() => {
+        nextImage();
+      }, 3000);
+      return () => clearInterval(intervalId);
+    }
+  })
+
   return (
     <SliderContainer className="slider-container">
-        <div className="slider">
-            <div className="slide">
-                <Image key={images[currentImage].id} src={images[currentImage].image} alt={`Image ${images[currentImage].id}`} />
-            </div>
-        </div>
-      <PrevButton onClick={prevImage}><ArrowBackIcon/></PrevButton>
-      <NextButton onClick={nextImage}><ArrowForwardIcon/></NextButton>
+      <div className="slider">
+        <a className="slide">
+          <CardMedia 
+            component='img'
+            key={images[currentImage].id} 
+            image={images[currentImage].image}
+            height={400} 
+            alt={`Image ${images[currentImage].id}`} />
+        </a>
+      </div>
+      <Button sx={{left: 0}}onClick={prevImage} size="large"><ArrowCircleLeftIcon fontSize="inherit" sx={{width: '2.5rem', height: '2.5rem'}}/></Button>
+      <Button sx={{right: 0}} onClick={nextImage} size="large"><ArrowCircleRightIcon fontSize="inherit" sx={{width: '2.5rem', height: '2.5rem'}}/></Button>
+      <Box>
+        <StackStyled direction={'row'}>
+          {images.map((image, index) => (
+            <IconButton key={index} onClick={()=>onSelectedImage(index)}><FiberManualRecordOutlinedIcon/></IconButton>
+          ))}
+        </StackStyled>
+      </Box>
+      
     </SliderContainer>
   );
 };

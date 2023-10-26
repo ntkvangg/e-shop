@@ -45,9 +45,12 @@ const CategoryName = styled.span`
     line-height: 3rem; /* 133.333% */
     letter-spacing: 0.09rem;
 `
+interface Props{
+    label?: string,
+    title?: string
+}
 
-
-const HeaderCategory = ({label, title}: {label: string, title: string}) => {
+const HeaderCategory = ({label, title}: Props) => {
 
     return <Wrapper className="wrapper-category">
         <TitleWrapper>

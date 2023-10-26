@@ -7,7 +7,9 @@ import FiberManualRecordOutlinedIcon from '@mui/icons-material/FiberManualRecord
 const SliderContainer = styled(Box)`
   position: relative;
   width: 100%;
-  overflow: hidden; /* Hide overflow for images that are larger than the container */
+  height: 400px;
+  min-height: 200px;
+  overflow: hidden;
   .slider{
     display: flex;
     .slide{
@@ -16,7 +18,7 @@ const SliderContainer = styled(Box)`
         transition: all 400s ease-out;
         img{
             width: 100%;
-            object-fit: cover;
+            object-fit: fill;
         }
     }
     .slide:hover{
@@ -37,8 +39,7 @@ const Button = styled(IconButton)(({ theme }: { theme: any })=>{
   }
 })
 
-const StackStyled = styled(Stack)(({ theme }: { theme: any })=>{
-  console.log(theme)
+const StackStyled = styled(Stack)(({ theme }: { theme: any })=>{  
   return {
     position: 'absolute',
     bottom: '5px',
@@ -55,6 +56,9 @@ const StackStyled = styled(Stack)(({ theme }: { theme: any })=>{
     },
     '& .MuiIconButton-root:hover':{
       transform: 'scale(1.1)',
+      color: theme.palette.primary.main
+    },
+    '.active':{
       color: theme.palette.primary.main
     }
   }
@@ -81,7 +85,7 @@ interface Props {
   images?: any;
   isPlaying?: boolean;
 }
-const Slider = ({isPlaying = true}: Props) => {
+const Slider = ({isPlaying = false}: Props) => {
   const [currentImage, setCurrentImage] = React.useState(0);
 
   const nextImage = () => {
@@ -122,7 +126,7 @@ const Slider = ({isPlaying = true}: Props) => {
       <Box>
         <StackStyled direction={'row'}>
           {images.map((image, index) => (
-            <IconButton key={index} onClick={()=>onSelectedImage(index)}><FiberManualRecordOutlinedIcon/></IconButton>
+            <IconButton key={index} onClick={()=>onSelectedImage(index)} className={`${currentImage === index ? 'active' : ''}`}><FiberManualRecordOutlinedIcon/></IconButton>
           ))}
         </StackStyled>
       </Box>

@@ -1,10 +1,10 @@
 import React, {forwardRef, ForwardRefRenderFunction, useImperativeHandle, Ref} from 'react';
 import styled from 'styled-components';
-import { Image } from './Slider';
 import RateStar from './RateStar';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { Card, CardMedia, CardContent, Typography, Stack, Badge, Button, Box } from '@mui/material';
 import Helper from '@utils/index';
+import { useNavigate } from 'react-router-dom';
 
 
 const ContainerImage = styled(Box)`
@@ -66,20 +66,26 @@ interface Props {
 }
 
 const CardProduct = forwardRef<HTMLDivElement, Props>(function CardProduct(props, ref){
+    const navigate = useNavigate();
     const {productItem} = props;
+    console.log(productItem);
+    const onClickProduct = () => {
+        navigate(`/product-detail/${productItem?.id}`)
+    }
     return (
-    <Card sx={{ maxWidth: 345, minWidth: 300, boxShadow: 'none', borderRadius: 0 }} ref={ref}>
-        <ContainerImage sx={{position: 'relative', cursor: 'pointer'}}>
+    <Card sx={{ maxWidth: 345, boxShadow: 'none', borderRadius: 0 }} ref={ref}>
+        <ContainerImage sx={{position: 'relative', cursor: 'pointer'}} onClick={onClickProduct}>
             <CardMedia
-            component="img"
-            height="250"
-            image={productItem?.thumbnail}
-            alt={productItem?.title}
+                component="img"
+                height="250"
+                loading='lazy'
+                image={productItem?.thumbnail}
+                alt={productItem?.title}
             />
             <Badge color="error" badgeContent={`${productItem?.discountPercentage}%`} sx={{color: "#DB4444", position: 'absolute', top: '1.2rem', left: '2.5rem', '.MuiBadge-badge': {borderRadius: '3px', padding: '0.75rem'}}}/>
             <AddToCartContainer>
                 <Button variant="outlined" startIcon={<AddShoppingCartIcon className='icon'/>} className='add-to-cart'>
-                     Add to cart
+                    Add to cart
                 </Button>
             </AddToCartContainer>
         </ContainerImage>

@@ -1,10 +1,8 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
-import { Button, Grid, IconButton, Stack, Typography } from '@mui/material';
+import { Button, Grid} from '@mui/material';
 import HeaderCategory from '@common/HeaderCategory';
 import CardProduct from '@common/ProductCard';
-import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
-import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import SkeletonView from '@common/SkeletonView';
 import TimeCountDown from '@common/TimeCountDown';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';

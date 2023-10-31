@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, createRef, useMemo } from 'react';
 import ProductCard from './ProductCard';
-import { Box } from '@mui/material';
+import { Box, Grid, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import HeaderCategory from './HeaderCategory';
+
+
+const BoxWrapper = styled(Box)(({ theme }: { theme: any }) => {
+    return {
+        overflow: 'hidden',
+        width: '100%'
+    }
+})
 
 const BoxSlider = styled(Box)(({ theme }: { theme: any }) => {
     return {
         display: 'flex',
-        overflow: 'hidden',
         width: '100%',
         transition: 'transform 0.5s ease',
         '-webkit-transition': '-webkit-transform 0.5s ease',
@@ -15,44 +25,101 @@ const BoxSlider = styled(Box)(({ theme }: { theme: any }) => {
     }
 })
 
-const ProductSlider = ({ products }: { products: any }) => {
-    const [currentPage, setCurrentPage] = useState(0);
-    const productsPerPage = 4;
+const BoxSliderItem = styled(ProductCard)(({ theme }: { theme: any }) => {
+    return {
+        flex: '0 0 auto',
+        marginRight: '10px',
+    }
+})
 
-    const handleClickNext = () => {
-        const nextPage = currentPage + 1;
-        setCurrentPage(nextPage);
+interface Props {
+    products: any,
+    label?: string
+}
+
+
+const ProductSlider = ({ products, label }: Props) => {
+    const productRefs: any = useRef([]);
+    const sliderContentRef: any = useRef(null);
+    const [categoryWidth, setCategoryWidth] = useState(0);
+    let offset = 0;
+    const [isDisableNextBtn, setIsDisableNextBtn] = useState(false);
+    const [isDisablePrevBtn, setIsDisablePrevBtn] = useState(true);    
+
+
+    useEffect(() => {
+        productRefs.current = Array.from({ length: products.length }).map((_, i) => productRefs.current[i] || createRef());
+    }, [products.length]);
+
+    useEffect(() => {
+        if (productRefs.current.length > 0) {
+            setCategoryWidth(productRefs.current[0].current.offsetWidth);
+        }
+    }, [productRefs.current.length]);
+
+    const countElementVisible = () => {
+        let count = 0;
+        for (let i = 0; i < productRefs.current.length; i++) {
+            if (isElementVisible(productRefs.current[i].current)) {
+                count++;
+            }
+        }
+        return count;
     };
 
-    const handleClickBack = () => {
-        const prevPage = currentPage - 1;
-        setCurrentPage(prevPage);
+    const handlePrevClick = () => {
+        let count = countElementVisible();
+        offset = offset - ((categoryWidth + 20) * count);
+        if (offset < 0) {
+            offset = 0;
+        }
+        setIsDisablePrevBtn(offset === 0);
+        setIsDisableNextBtn(false);
+        sliderContentRef.current.style.transform = `translateX(-${offset}px)`;
+
+    }
+
+    const handleNextClick = () => {
+        let count = countElementVisible();
+        offset = offset + ((categoryWidth + 20) * count);
+        const contentWidth = sliderContentRef.current.offsetWidth;
+        if (offset > contentWidth) {
+            offset = contentWidth + 20;
+        }
+        setIsDisableNextBtn(offset === contentWidth + 20);
+        setIsDisablePrevBtn(false);
+        sliderContentRef.current.style.transform = `translateX(-${offset}px)`;
     };
 
-    const transformValue = -currentPage * (100 / productsPerPage);
+    const isElementVisible = (el: any) => {
+        if (!el) return false;
+        const rect = el.getBoundingClientRect();
+        return rect.top >= 0 && rect.left >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && rect.right <= (window.innerWidth || document.documentElement.clientWidth)
 
+    }
     return (
-        <div>
-            <BoxSlider 
-                className="product-slider"
-                style={{ transform: `translateX(${transformValue}%)` }} // Apply the transform property
-            >
-                {products.map((product: any, index: number) => (
-                    <ProductCard key={index} productItem={product} />
-                ))}
-            </BoxSlider>
-            <div className="slider-controls">
-                <button onClick={handleClickBack} disabled={currentPage === 0}>
-                    Back
-                </button>
-                <button
-                    onClick={handleClickNext}
-                    disabled={currentPage >= products.length / productsPerPage - 1}
+        <Box sx={{marginTop: 3}}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
+                {label && <HeaderCategory label={label}/>}
+                <Box>
+                    <IconButton onClick={handlePrevClick} disabled={isDisablePrevBtn}><ArrowCircleLeftIcon /></IconButton>
+                    <IconButton onClick={handleNextClick} disabled={isDisableNextBtn}><ArrowCircleRightIcon /></IconButton>
+                </Box>
+            </Box>
+            <BoxWrapper className='category-slider' sx={{ position: 'relative' }}>
+                <BoxSlider component={'div'}
+                    className="slider-content"
+                    ref={sliderContentRef}
                 >
-                    Next
-                </button>
-            </div>
-        </div>
+                    {products.map((product: any, index: number) => (
+                        <Box sx={{ marginRight: '20px', width: 275, flex: '0 0 auto' }} key={index} ref={productRefs.current[index]} component={'div'} className={`category-item`}>
+                            <BoxSliderItem productItem={product} />
+                        </Box>
+                    ))}
+                </BoxSlider>
+            </BoxWrapper>
+        </Box>
+
     );
 };
 

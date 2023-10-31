@@ -38,7 +38,8 @@ export default class ProductService {
         return response.data;
     }
     static async getProductsRelated(category: string) {
-        const response = await API.get(`/products/category/${category}`);
+        // const response = await API.get(`/products/category/${category}`);
+        const response = await API.get('/products', {params: {skip: 0, limit: 8}})
         return response.data;
     }
 }

@@ -8,8 +8,10 @@ import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import ElectricRickshawIcon from '@mui/icons-material/ElectricRickshaw';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import HeaderCategory from "@common/HeaderCategory";
-import CardProduct from "@common/ProductCard";
 import ProductSlider from "@common/SliderCategory";
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import SliderCategory from "@common/SliderCategory";
 
 const InStock = styled(Typography)(({ theme }: { theme: any }) => {
     return {
@@ -31,7 +33,6 @@ const ColorButton = styled(Box)(({ theme }: { theme: any }) => {
 })
 const ProductDetail = () => {
     const { id } = useParams<{ id: any }>();
-    console.log(id);
     const [product, setProduct] = useState({} as IProduct);
     const [currentImage, setCurrentImage] = useState('' as string);
     const [selectedColor, setSelectedColor] = useState('#fff' as string);
@@ -41,8 +42,7 @@ const ProductDetail = () => {
         try {
             const data = await ProductService.getProductDetail(id);
             setCategory(data.category);
-            data.colors = ["#fff", "#000", "#f00", "#0f0", "#00f", "#ff0"]
-            console.log(data);
+            data.colors = ["#fff", "#000", "#f00", "#0f0", "#00f", "#ff0"];            
             setCurrentImage(data.thumbnail);
             setProduct(data);
         } catch (error) {
@@ -63,6 +63,14 @@ const ProductDetail = () => {
 
     const onSelectedImage = (img: string) => {
         setCurrentImage(img);
+    }
+
+    const nextProduct = () => {
+
+    }
+
+    const prevProduct = () => {
+
     }
 
     useEffect(() => {
@@ -98,7 +106,6 @@ const ProductDetail = () => {
                                         alt={product.title}
                                     />
                                 </CardActionArea>
-
                             </Card>
                         ))}
                     </Box>
@@ -157,17 +164,7 @@ const ProductDetail = () => {
                     </Box>
                 </Grid>
             </Grid>
-            <Grid container spacing={2} sx={{ marginTop: 3 }}>
-                <HeaderCategory label="Related Items" />
-                <Grid container spacing={2}>
-                    {productsRelated.map((product: any, index: number) => (
-                        <Grid item xs={12} sm={6} md={4} lg={3} xl={3} key={index}>
-                            <CardProduct key={index} productItem={product} />
-                        </Grid>
-                    ))}
-                </Grid>
-                {/* <ProductSlider products={productsRelated}/> */}
-            </Grid>
+            <SliderCategory products={productsRelated} label="Related Items"/>
         </Container>
     );
 }

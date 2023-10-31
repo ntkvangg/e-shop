@@ -67,13 +67,12 @@ interface Props {
 
 const CardProduct = forwardRef<HTMLDivElement, Props>(function CardProduct(props, ref){
     const navigate = useNavigate();
-    const {productItem} = props;
-    console.log(productItem);
+    const {productItem} = props;    
     const onClickProduct = () => {
         navigate(`/product-detail/${productItem?.id}`)
     }
     return (
-    <Card sx={{ maxWidth: 345, boxShadow: 'none', borderRadius: 0 }} ref={ref}>
+    <Card sx={{ maxWidth: 300, boxShadow: 'none', borderRadius: 0, minWidth: 275 }} ref={ref}>
         <ContainerImage sx={{position: 'relative', cursor: 'pointer'}} onClick={onClickProduct}>
             <CardMedia
                 component="img"

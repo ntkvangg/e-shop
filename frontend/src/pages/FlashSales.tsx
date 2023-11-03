@@ -67,7 +67,7 @@ const FlashSales = () => {
             </Box>
             <Container maxWidth="xl">
                 {
-                    loading ? <SkeletonView /> : <Grid container spacing={2}>
+                    loading ? <SkeletonView items={8}/> : <Grid container spacing={2}>
                         {products.map((product: any, index: number) => (
                             <Grid item xs={12} sm={6} md={4} lg={3} xl={3} key={index}>
                                 <CardProduct key={index} productItem={product} />

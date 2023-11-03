@@ -53,7 +53,7 @@ const ProductSlider = ({ products, label }: Props) => {
 
     useEffect(() => {
         if (productRefs.current.length > 0) {
-            setCategoryWidth(productRefs.current[0].current.offsetWidth);
+            setCategoryWidth(productRefs.current[0]?.current?.offsetWidth);
         }
     }, [productRefs.current.length]);
 

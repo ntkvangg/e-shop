@@ -1,11 +1,18 @@
 import { Box, Grid, Skeleton } from "@mui/material";
 
-const SkeletonView = () => {
+interface Props{
+    items?: number,
+    isCategory?: boolean
+}
+const SkeletonView = ({items = 4, isCategory}: Props) => {
     return (
         <Grid container spacing={2}>
-            {Array.from(new Array(8)).map((product: any, index) => (
+            {isCategory && <Grid item xs={12}>
+                <Skeleton width="40%" height={50}/>
+            </Grid>}
+            {Array.from(new Array(items)).map((product: any, index) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={3} key={index}>
-                    <Skeleton variant="rectangular" width={345} height={200} />
+                    <Skeleton variant="rectangular" height={250} />
                     <Box sx={{ pt: 0.5 }}>
                         <Skeleton />
                         <Skeleton width="60%" />

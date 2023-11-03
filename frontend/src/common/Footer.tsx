@@ -39,7 +39,7 @@ const ColumnStyled = styled.div`
 
 export default function Footer() {
   return (
-    <footer className='footer'>
+    <footer className='footer' id='footer'>
         <ContainerStyled>
             <ColumnStyled>
                 <Typography variant="h6" component="div" sx={{fontSize: '1rem'}}>FOLLOW US</Typography>
